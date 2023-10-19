@@ -1,0 +1,36 @@
+FS_Tracker:
+
+tracker.py pode ser o ponto de entrada para o FS_Tracker.
+Crie uma classe para representar o tracker.
+Implemente um servidor UDP para que os FS_Nodes possam registrar seus pacotes e informações do arquivo.
+Mantenha uma base de dados (SQLite ou outro) para armazenar as informações dos pacotes e arquivos.
+Implemente uma API para que os FS_Nodes possam consultar as informações dos pacotes e arquivos.
+FS_Node:
+
+node.py pode ser o ponto de entrada para o FS_Node.
+Crie uma classe para representar um nó do FS.
+Implemente um servidor TCP para que outros FS_Nodes possam se conectar e trocar informações.
+Implemente algoritmos de seleção para decidir a quem enviar pacotes.
+Mantenha um registro de pacotes que o nó possui e os pacotes que deseja receber.
+Comunicação entre FS_Tracker e FS_Node:
+
+Implemente um protocolo para a comunicação entre o FS_Tracker e o FS_Node via UDP. Isso pode incluir mensagens
+para registrar pacotes, consultar informações e atualizar informações. Implemente um protocolo para a comunicação
+entre FS_Nodes via TCP. Isso pode incluir mensagens para trocar informações de pacotes e coordenar a transferência.
+Cliente/Servidor simultâneo:
+
+Para que o FS_Node aja como cliente e servidor simultaneamente, você precisará de threads separadas (ou asyncio,
+se preferir) para tratar a comunicação com outros FS_Nodes e atender a solicitações de outros FS_Nodes.
+
+Teste e Depuração:
+
+Crie testes para verificar se o FS_Tracker e o FS_Node funcionam conforme o esperado.
+Use registros e depuração para rastrear problemas.
+Escalabilidade:
+
+Pense na escalabilidade desde o início. Considere como seu sistema se comportará com muitos FS_Nodes e pacotes.
+Este é um projeto ambicioso e desafiador que requer planejamento, design cuidadoso e implementação detalhada. 
+Além disso, a segurança é uma preocupação importante, já que você estará lidando com transferência de dados entre
+diferentes nós. Certifique-se de considerar as implicações de segurança e proteção contra ataques. Tenha em mente
+que a implementação de um BitTorrent completo é um esforço significativo e pode exigir meses de trabalho, dependendo 
+do escopo do projeto e da sua experiência em programação.
