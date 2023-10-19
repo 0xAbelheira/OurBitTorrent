@@ -5,6 +5,7 @@ Crie uma classe para representar o tracker.
 Implemente um servidor UDP para que os FS_Nodes possam registrar seus pacotes e informações do arquivo.
 Mantenha uma base de dados (SQLite ou outro) para armazenar as informações dos pacotes e arquivos.
 Implemente uma API para que os FS_Nodes possam consultar as informações dos pacotes e arquivos.
+
 FS_Node:
 
 node.py pode ser o ponto de entrada para o FS_Node.
@@ -34,3 +35,18 @@ Além disso, a segurança é uma preocupação importante, já que você estará
 diferentes nós. Certifique-se de considerar as implicações de segurança e proteção contra ataques. Tenha em mente
 que a implementação de um BitTorrent completo é um esforço significativo e pode exigir meses de trabalho, dependendo 
 do escopo do projeto e da sua experiência em programação.
+
+---------------------------
+
+    Ambos funcionam para TCP (boa ideia usar para o tracker)
+FTP -> 
+HTTP -> Possui um header maior
+
+    Verificar estruturas protoclares
+    Porta do cliente é aleatória, ao contrário da do servidor
+
+    1.Presentation (Dentro do FS_Tracker)
+        <IP adress> <L Files> <L blocks>
+        (Aqui podemos ter tamnho fixo) (campo variavel) (campo variavel)
+        TLV
+        Saber onde terminam os nossos campos
