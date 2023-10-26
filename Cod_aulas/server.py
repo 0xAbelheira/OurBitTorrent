@@ -6,7 +6,7 @@ import time
 
 class Database:
     def __init__(self):
-        self.dados = {"coisas": 3, "jmf": -5, "redes": 1}
+        self.dados = {"file_name": 3, "packets": -5, "ip": 1}
         self.lock = threading.Lock()
 
 

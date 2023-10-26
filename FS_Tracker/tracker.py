@@ -3,7 +3,7 @@ import socket
 class FS_Tracker:
     def __init__(self):
         self.database = {}  # Dicionário para armazenar informações de pacotes e arquivos
-        self.server_address = ('localhost', 10000)  # Defina o endereço e a porta desejados
+        self.server_address = ('localhost', 12345)  # Defina o endereço e a porta desejados
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(self.server_address)
 
