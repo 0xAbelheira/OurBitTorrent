@@ -6,6 +6,10 @@ Implementar um servidor UDP para que os FS_Nodes possam registrar seus pacotes e
 Utilizar um dicionário para manter um DB sobre as ficheiros, pacotes e ip´s
 Implementar uma API para que os FS_Nodes possam consultar as informações dos pacotes e arquivos.
 
+Calcular payload.
+Definir a comunicacao
+Começar com strings e mudar para bytes
+
 FS_Node:
 
 node.py pode ser o ponto de entrada para o FS_Node.
