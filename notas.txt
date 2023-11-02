@@ -57,6 +57,7 @@ HTTP -> Possui um header maior
         Saber onde terminam os nossos campos
 
 -----------------------------
+//TODO Escolher e começar a implementar este metodo
 Para a mensagem Hello, podemos usar serialização
 Ver opções a usar (protocol buffers, JSON ou pickle)
 Ou podemos usar bytes através da ferramenta encode
