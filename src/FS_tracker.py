@@ -1,0 +1,102 @@
+import socket
+import pickle
+import threading
+
+HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+
+
+class FSTrackProtocol:
+    """
+    Class for implementing the FS Track protocol for communication between nodes and the tracker.
+    """
+
+    def __init__(self, host, port):
+        self.tracker = Tracker(host, port)
+
+    def start_server(self):
+        self.tracker.start_server()
+
+    def view_database(self):
+        self.tracker.view_database()
+
+
+class Tracker:
+
+    def __init__(self, host, port):
+        """
+        Initializes the Tracker object with the given host and port.
+        Creates an empty database to store node information.
+        """
+        self.host = host
+        self.port = port
+        self.database = {}
+
+    def start_server(self):
+        """
+        Starts the server on the specified host and port.
+        Listen for incoming connections and handle the 'hello' message from nodes.
+        """
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen()
+
+            while True:
+                conn, addr = server_socket.accept()
+                with conn:
+                    print(f"\nConnected by {addr}")
+                    data = conn.recv(1024)
+                    if data:
+                        decoded_data = pickle.loads(data)
+                        if decoded_data['type'] == 'hello':
+                            self.handle_hello_message(decoded_data, addr[0])
+                            conn.sendall(pickle.dumps(
+                                {"message": "Data received and processed"}))
+
+    def handle_hello_message(self, data, node_ip):
+        """
+        Handle the 'hello' message from nodes.
+        Update node information in the database if the node already exists; otherwise, add a new node entry.
+        """
+        node_files = data['files']
+        for file, file_info in node_files.items():
+            if file not in self.database:
+                self.database[file] = []
+            existing_node = next(
+                (node for node in self.database[file] if node['node_ip_real'] == node_ip), None)
+            if existing_node:
+                existing_node['blocks_available'] = file_info['blocks_available']
+                existing_node['total_blocks'] = file_info['total_blocks']
+            else:
+                self.database[file].append(
+                    {'node_ip_real': node_ip, 'node_ip_hardcoded': file_info['ip'], 'blocks_available': file_info['blocks_available'], 'total_blocks': file_info['total_blocks']})
+
+    def view_database(self):
+        """
+        Display the current content of the database, including the files, node IPs, available blocks, and total blocks.
+        """
+        for file, nodes in self.database.items():
+            print(f"File: {file}")
+            for node in nodes:
+                print(
+                    f"Node IP (real): {node['node_ip_real']}, Node IP (hardcoded): {node['node_ip_hardcoded']}, Blocks Available: {node['blocks_available']}, Total Blocks: {node['total_blocks']}")
+
+
+if __name__ == "__main__":
+    # Initialize the FS Track Protocol with the Tracker's host and port
+    fs_track_protocol = FSTrackProtocol(HOST, PORT)
+
+    # Start the server in a separate thread
+    server_thread = threading.Thread(target=fs_track_protocol.start_server)
+    server_thread.start()
+
+    # Allow user interaction to view the database or exit
+    while True:
+        user_input = input(
+            "Type 'view' to display the database in FS_Tracker or 'exit' to quit: ")
+        if user_input == 'view':
+            fs_track_protocol.view_database()
+        elif user_input == 'exit':
+            break
+        else:
+            print("Invalid command. Please try again.")

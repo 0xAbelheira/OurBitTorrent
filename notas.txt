@@ -40,24 +40,41 @@ Escalabilidade:
 
 Pensar na escalabilidade desde o início. Considerar como se vai comportar o trabalho com muitos FS_Nodes e pacotes.
 
-
----------------------------
-
-    Ambos funcionam para TCP (boa ideia usar para o tracker)
-FTP -> 
-HTTP -> Possui um header maior
-
-    Verificar estruturas protoclares
-    Porta do cliente é aleatória, ao contrário da do servidor
-
-    1.Presentation (Dentro do FS_Tracker)
-        <IP adress> <L Files> <L blocks>
-        (Aqui podemos ter tamnho fixo) (campo variavel) (campo variavel)
-        TLV
-        Saber onde terminam os nossos campos
-
 -----------------------------
-//TODO Escolher e começar a implementar este metodo
-Para a mensagem Hello, podemos usar serialização
-Ver opções a usar (protocol buffers, JSON ou pickle)
-Ou podemos usar bytes através da ferramenta encode
+Multiplexagem: Permite que vários fluxos de dados sejam transmitidos simultaneamente em uma única conexão de rede. 
+Você pode implementar técnicas de multiplexagem para segmentar os dados em pacotes e recombina-los no lado do receptor.
+
+End-to-End Communication: Garante que os dados sejam transmitidos de forma confiável do nó de origem para o nó de destino, 
+independentemente do número de saltos intermediários. Isso pode ser alcançado usando protocolos de transporte confiáveis, 
+como TCP (Transmission Control Protocol).
+
+Controlo de Fluxo (Flow Control): Permite que o transmissor ajuste a taxa de transmissão de dados para corresponder à capacidade
+ de processamento do recetor, evitando assim a sobrecarga do buffer. Isso é especialmente importante quando os nós estão operando
+  em diferentes velocidades.
+
+Controlo de Congestionamento (Congestion Control): Previne a sobrecarga da rede, regulando a taxa de transmissão com base na
+ condição da rede. Implemente algoritmos de controlo de congestionamento para evitar o congestionamento da rede e garantir a
+  entrega eficiente dos dados.
+
+Sequenciação de Pacotes (Packet Sequencing): Garante que os pacotes sejam recebidos na ordem correta no lado do destinatário,
+ especialmente em ambientes de rede propensos a atrasos e perdas. Adicione números de sequência aos pacotes para que o destinatário
+  possa reorganizá-los corretamente.
+
+  ---------------------------------------
+
+  TODO LIST:
+    [x] - Iniciar o servidor do tracker e deixa-lo á escuta.
+    [x] - Fornecer ao node uma maneira de se ligar ao servidor, através de sockets
+    [x] - Realizar a ligação do node ao tracker
+    [x] - Servidor é informado da ligação
+    [x] - Cliente é informado caso a informação tenha sido enviada
+    [x] - Enviar a estutura serializada, para deste modo o tracker guardar a informação presente no node
+    [x] - Organizar a informação no tracker e não deixar que este repita dados e informação
+    [x] - Função que permite visualizar a database
+    [x] - Separação dos protocolos com a classe em si ???
+    [] - Fazer com que o FS_Tracker não pare de receber dados a meio, e que consiga receber grande quantidade de dados
+    [] - Fazer com que o node tenha posse de ficheiros e dividi-los em blocos
+    [] - Sempre que um nó atualizar, devemos enviar a informação para o Tracker.
+    [] - Ver como funciona a questão dos IP's
+
+  
