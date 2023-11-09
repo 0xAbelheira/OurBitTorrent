@@ -57,7 +57,8 @@ class Tracker:
                             conn.sendall(pickle.dumps(
                                 {"message": "Data received and processed"}))
                         if decoded_data['type'] == 'GET':
-                            print(f"teste")
+                            conn.sendall(conn.sendall(pickle.dumps(
+                                {"message": "Response of type:GET not yet implemented"})))
 
     def handle_hello_message(self, data, node_ip):
         """
@@ -66,8 +67,7 @@ class Tracker:
         """
         node_files = data['files']
         for file, file_info in node_files.items():
-            if file not in self.database:
-                self.database.add_file(
+            self.database.add_file(
                     file, node_ip, file_info['blocks_available'], file_info['total_blocks'])
 
     def view_database(self):
