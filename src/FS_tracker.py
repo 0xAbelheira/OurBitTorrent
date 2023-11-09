@@ -49,7 +49,9 @@ class Tracker:
                 conn, addr = server_socket.accept()
                 with conn:
                     print(f"\nConnected by {addr}")
-                    data = conn.recv(1024)
+                    msg = b""
+                    data = conn.recv(10)
+                    
                     if data:
                         decoded_data = pickle.loads(data)
                         if decoded_data['type'] == 'HELLO':
@@ -68,7 +70,7 @@ class Tracker:
         node_files = data['files']
         for file, file_info in node_files.items():
             self.database.add_file(
-                    file, node_ip, file_info['blocks_available'], file_info['total_blocks'])
+                file, node_ip, file_info['blocks_available'], file_info['total_blocks'])
 
     def view_database(self):
         self.database.view_database()

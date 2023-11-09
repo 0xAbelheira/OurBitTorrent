@@ -49,7 +49,7 @@ class Node:
             node_socket.connect((self.tracker_host, self.tracker_port))
             message = {'type': 'HELLO', 'files': self.files}
             node_socket.sendall(pickle.dumps(message))
-            data = node_socket.recv(1024)
+            data = node_socket.recv(10)
             if data:
                 response = pickle.loads(data)
                 print(response['message'])
