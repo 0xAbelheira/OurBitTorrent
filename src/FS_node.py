@@ -25,7 +25,7 @@ class Node:
         self.files = {
             'example_file1.txt': {
                 'ip': '192.168.0.2',
-                'blocks_available': [3, 4, 5],
+                'blocks_available': [1, 2, 3, 4, 5],
                 'total_blocks': 5
             },
             'example_file2.txt': {
@@ -47,7 +47,7 @@ class Node:
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as node_socket:
             node_socket.connect((self.tracker_host, self.tracker_port))
-            message = {'type': 'hello', 'files': self.files}
+            message = {'type': 'HELLO', 'files': self.files}
             node_socket.sendall(pickle.dumps(message))
             data = node_socket.recv(1024)
             if data:

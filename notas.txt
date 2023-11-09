@@ -75,6 +75,8 @@ Sequenciação de Pacotes (Packet Sequencing): Garante que os pacotes sejam rece
     [] - Fazer com que o FS_Tracker não pare de receber dados a meio, e que consiga receber grande quantidade de dados
     [] - Fazer com que o node tenha posse de ficheiros e dividi-los em blocos
     [] - Sempre que um nó atualizar, devemos enviar a informação para o Tracker.
+    [] - Estabelecer o pedido GET (como vai acontecer o pedido do ficheiro)
     [] - Ver como funciona a questão dos IP's
 
-  
+
+// 

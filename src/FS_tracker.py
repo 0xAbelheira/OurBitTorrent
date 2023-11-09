@@ -5,7 +5,6 @@ import threading
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 
-
 class FSTrackProtocol:
     """
     Class for implementing the FS Track protocol for communication between nodes and the tracker.
@@ -19,6 +18,9 @@ class FSTrackProtocol:
 
     def view_database(self):
         self.tracker.view_database()
+        
+    def close_server(self):
+        self.tracker.close()
 
 
 class Tracker:
@@ -48,10 +50,12 @@ class Tracker:
                     data = conn.recv(1024)
                     if data:
                         decoded_data = pickle.loads(data)
-                        if decoded_data['type'] == 'hello':
+                        if decoded_data['type'] == 'HELLO':
                             self.handle_hello_message(decoded_data, addr[0])
                             conn.sendall(pickle.dumps(
                                 {"message": "Data received and processed"}))
+                        if decoded_data['type'] == 'GET':
+                            print(f"teste")
 
     def handle_hello_message(self, data, node_ip):
         """
@@ -66,7 +70,7 @@ class Tracker:
                 (node for node in self.database[file] if node['node_ip_real'] == node_ip), None)
             if existing_node:
                 existing_node['blocks_available'] = file_info['blocks_available']
-                existing_node['total_blocks'] = file_info['total_blocks']
+                #existing_node['total_blocks'] = file_info['total_blocks']
             else:
                 self.database[file].append(
                     {'node_ip_real': node_ip, 'node_ip_hardcoded': file_info['ip'], 'blocks_available': file_info['blocks_available'], 'total_blocks': file_info['total_blocks']})
