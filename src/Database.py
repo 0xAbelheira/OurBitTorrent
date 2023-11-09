@@ -33,6 +33,8 @@ class Database:
             del self.files[filename]
 
     def view_database(self):
+        if self.files == {}:
+            print("NO INFORMATION IN THE DATABASE!")
         for file, file_info in self.files.items():
             print(f"File: {file}")
             print(f"IP: {file_info['ip']}")

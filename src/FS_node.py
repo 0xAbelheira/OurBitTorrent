@@ -3,6 +3,7 @@ import pickle
 
 HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
+HEADERSIZE = 15
 
 class FSTransferProtocol:
     """
@@ -48,8 +49,10 @@ class Node:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as node_socket:
             node_socket.connect((self.tracker_host, self.tracker_port))
             message = {'type': 'HELLO', 'files': self.files}
-            node_socket.sendall(pickle.dumps(message))
-            data = node_socket.recv(10)
+            msg = pickle.dumps(message)
+            msg = bytes(f'{len(msg):<{HEADERSIZE}}', "utf-8") + msg
+            node_socket.sendall(msg)
+            data = node_socket.recv(1024)
             if data:
                 response = pickle.loads(data)
                 print(response['message'])

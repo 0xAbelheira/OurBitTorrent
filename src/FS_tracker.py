@@ -1,10 +1,12 @@
 import socket
 import pickle
-from Database import Database
 import threading
+import sys
+from Database import Database
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+HEADERSIZE = 15
 
 
 class FSTrackProtocol:
@@ -49,9 +51,7 @@ class Tracker:
                 conn, addr = server_socket.accept()
                 with conn:
                     print(f"\nConnected by {addr}")
-                    msg = b""
-                    data = conn.recv(10)
-                    
+                    data = self.handle_msg_size(conn)
                     if data:
                         decoded_data = pickle.loads(data)
                         if decoded_data['type'] == 'HELLO':
@@ -61,6 +61,27 @@ class Tracker:
                         if decoded_data['type'] == 'GET':
                             conn.sendall(conn.sendall(pickle.dumps(
                                 {"message": "Response of type:GET not yet implemented"})))
+
+    def handle_msg_size(self, conn):
+        full_msg = b''
+        new_msg = True
+        d = None  # Initialize d to avoid UnboundLocalError
+        while True:
+            msg = conn.recv(20)
+            if new_msg:
+                msglen = int(msg[:HEADERSIZE])
+                new_msg = False
+
+            full_msg += msg
+
+            if len(full_msg)-HEADERSIZE == msglen:
+                print("full msg recvd")
+                d = full_msg[HEADERSIZE:]
+                break
+        return d
+
+    def handle_get_message(self, data, node_ip):
+        print("Not defined yet!")
 
     def handle_hello_message(self, data, node_ip):
         """
@@ -88,9 +109,9 @@ if __name__ == "__main__":
     while True:
         user_input = input(
             "Type 'view' to display the database in FS_Tracker or 'exit' to quit: ")
-        if user_input == 'view':  # Colocar toUpper
+        if user_input.lower() == 'view':
             fs_track_protocol.view_database()
-        elif user_input == 'exit':
+        elif user_input.lower() == 'exit':
             break
         else:
             print("Invalid command. Please try again.")
