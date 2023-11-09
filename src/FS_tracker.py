@@ -1,9 +1,11 @@
 import socket
 import pickle
+from Database import Database
 import threading
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+
 
 class FSTrackProtocol:
     """
@@ -18,7 +20,7 @@ class FSTrackProtocol:
 
     def view_database(self):
         self.tracker.view_database()
-        
+
     def close_server(self):
         self.tracker.close()
 
@@ -32,7 +34,7 @@ class Tracker:
         """
         self.host = host
         self.port = port
-        self.database = {}
+        self.database = Database()
 
     def start_server(self):
         """
@@ -65,25 +67,11 @@ class Tracker:
         node_files = data['files']
         for file, file_info in node_files.items():
             if file not in self.database:
-                self.database[file] = []
-            existing_node = next(
-                (node for node in self.database[file] if node['node_ip_real'] == node_ip), None)
-            if existing_node:
-                existing_node['blocks_available'] = file_info['blocks_available']
-                #existing_node['total_blocks'] = file_info['total_blocks']
-            else:
-                self.database[file].append(
-                    {'node_ip_real': node_ip, 'node_ip_hardcoded': file_info['ip'], 'blocks_available': file_info['blocks_available'], 'total_blocks': file_info['total_blocks']})
+                self.database.add_file(
+                    file, node_ip, file_info['blocks_available'], file_info['total_blocks'])
 
     def view_database(self):
-        """
-        Display the current content of the database, including the files, node IPs, available blocks, and total blocks.
-        """
-        for file, nodes in self.database.items():
-            print(f"File: {file}")
-            for node in nodes:
-                print(
-                    f"Node IP (real): {node['node_ip_real']}, Node IP (hardcoded): {node['node_ip_hardcoded']}, Blocks Available: {node['blocks_available']}, Total Blocks: {node['total_blocks']}")
+        self.database.view_database()
 
 
 if __name__ == "__main__":
@@ -98,7 +86,7 @@ if __name__ == "__main__":
     while True:
         user_input = input(
             "Type 'view' to display the database in FS_Tracker or 'exit' to quit: ")
-        if user_input == 'view':
+        if user_input == 'view':  # Colocar toUpper
             fs_track_protocol.view_database()
         elif user_input == 'exit':
             break

@@ -78,5 +78,5 @@ Sequenciação de Pacotes (Packet Sequencing): Garante que os pacotes sejam rece
     [] - Estabelecer o pedido GET (como vai acontecer o pedido do ficheiro)
     [] - Ver como funciona a questão dos IP's
 
-
+    
 // 
