@@ -1,8 +1,10 @@
 import socket
-import pickle
 import threading
-import sys
+import logging
 from Database import Database
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -28,73 +30,88 @@ class FSTrackProtocol:
 
 
 class Tracker:
-
     def __init__(self, host, port):
-        """
-        Initializes the Tracker object with the given host and port.
-        Creates an empty database to store node information.
-        """
         self.host = host
         self.port = port
         self.database = Database()
+        self.lock = threading.RLock()
 
     def start_server(self):
-        """
-        Starts the server on the specified host and port.
-        Listen for incoming connections and handle the 'hello' message from nodes.
-        """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
             server_socket.listen()
 
             while True:
                 conn, addr = server_socket.accept()
-                with conn:
-                    print(f"\nConnected by {addr}")
-                    data = self.handle_msg_size(conn)
-                    if data:
-                        decoded_data = pickle.loads(data)
-                        if decoded_data['type'] == 'HELLO':
-                            self.handle_hello_message(decoded_data, addr[0])
-                            conn.sendall(pickle.dumps(
-                                {"message": "Data received and processed"}))
-                        if decoded_data['type'] == 'GET':
-                            conn.sendall(conn.sendall(pickle.dumps(
-                                {"message": "Response of type:GET not yet implemented"})))
+                logging.info(f"\nConnected by {addr}")
+                client_handler_thread = threading.Thread(target=self.client_handler, args=(conn, addr))
+                client_handler_thread.start()
+
+    def print(self):
+        with self.lock:
+            logging.debug("test thread")
+
+    def client_handler(self, conn, addr):
+        with self.lock:
+            data = self.handle_msg_size(conn)
+            if data:
+                self.handle_hello_message(data, addr[0])
+                conn.sendall(
+                    bytes(f"Data received and processed for {addr}", "utf-8"))
+            # Additional logic for GET message if needed
 
     def handle_msg_size(self, conn):
-        full_msg = b''
-        new_msg = True
-        d = None  # Initialize d to avoid UnboundLocalError
+        size_data = b''
+        delimiter = b'@'
+
         while True:
-            msg = conn.recv(20)
-            if new_msg:
-                msglen = int(msg[:HEADERSIZE])
-                new_msg = False
+            byte = conn.recv(1)
+            if not byte or byte == delimiter:
+                break
+
+            size_data += byte
+
+        try:
+            msg_size = int(size_data.decode('utf-8'))
+        except ValueError:
+            # Handle the case where the size data is not a valid integer
+            return None
+
+        full_msg = b''
+        
+        while len(full_msg) < msg_size:
+            remaining_size = msg_size - len(full_msg)
+            chunk_size = min(1024, remaining_size)
+            msg = conn.recv(chunk_size)
+
+            if not msg:
+                break  # Connection closed
 
             full_msg += msg
 
-            if len(full_msg)-HEADERSIZE == msglen:
-                print("full msg recvd")
-                d = full_msg[HEADERSIZE:]
-                break
-        return d
+        return full_msg if len(full_msg) == msg_size else None
 
-    def handle_get_message(self, data, node_ip):
-        print("Not defined yet!")
 
     def handle_hello_message(self, data, node_ip):
-        """
-        Handle the 'hello' message from nodes.
-        Update node information in the database if the node already exists; otherwise, add a new node entry.
-        """
-        node_files = data['files']
-        for file, file_info in node_files.items():
-            self.database.add_file(
-                file, node_ip, file_info['blocks_available'], file_info['total_blocks'])
-
-    def view_database(self):
-        self.database.view_database()
+        try:
+            data_str = data.decode('utf-8')
+            logging.info(f"Received HELLO message from {node_ip}")
+            if data_str.startswith("HELLO:"):
+                files_info = data_str[len("HELLO:"):].split('\n')
+                logging.debug(f"Files Info: {files_info}")  # Add this line for debugging
+                for file_info in files_info:
+                    file_data = file_info.split(':')
+                    if len(file_data) == 4:
+                        file_name, ip, blocks_str, total_blocks = file_data
+                        blocks_available = list(map(int, blocks_str.split(',')))
+                        logging.info(f"Node IP: {node_ip}, File: {file_name}, IP: {ip}, Blocks: {blocks_available}, Total Blocks: {total_blocks}")
+                        self.database.add_file(file_name, ip, blocks_available, total_blocks)
+                    else:
+                        logging.warning(f"Invalid file info: {file_info}")
+            else:
+                logging.warning("Invalid message type")
+        except Exception as e:
+            logging.error(f"Error in handle_hello_message: {e}")
 
 
 if __name__ == "__main__":
@@ -110,7 +127,7 @@ if __name__ == "__main__":
         user_input = input(
             "Type 'view' to display the database in FS_Tracker or 'exit' to quit: ")
         if user_input.lower() == 'view':
-            fs_track_protocol.view_database()
+            fs_track_protocol.tracker.database.view_database()
         elif user_input.lower() == 'exit':
             break
         else:

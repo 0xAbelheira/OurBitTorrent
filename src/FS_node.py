@@ -47,17 +47,20 @@ class Node:
         Prints the response received from the tracker.
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as node_socket:
-            node_socket.connect((self.tracker_host, self.tracker_port))
-            message = {'type': 'HELLO', 'files': self.files}
-            msg = pickle.dumps(message)
-            msg = bytes(f'{len(msg):<{HEADERSIZE}}', "utf-8") + msg
+            node_socket.connect((self.tracker_host, self.tracker_port))  # Fix here
+            
+            files_str = "\n".join(
+                f"{key}:{value['ip']}:{','.join(map(str, value['blocks_available']))}:{value['total_blocks']}"
+                for key, value in self.files.items()
+            )
+            
+            message = f"HELLO:{files_str}"
+            
+            msg = bytes(f"{len(message)}@", "utf-8") + message.encode("utf-8")
+            
             node_socket.sendall(msg)
-            data = node_socket.recv(1024)
-            if data:
-                response = pickle.loads(data)
-                print(response['message'])
-
-
+            
+            
 if __name__ == "__main__":
     # Initialize the FS Transfer Protocol with the Node's host, port, tracker's host, and port
     fs_transfer_protocol = FSTransferProtocol('localhost', 9999, HOST, PORT)
