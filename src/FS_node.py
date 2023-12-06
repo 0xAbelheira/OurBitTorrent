@@ -1,5 +1,6 @@
 import socket
-import pickle
+import logging
+import threading
 
 HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
@@ -59,6 +60,22 @@ class Node:
             msg = bytes(f"{len(message)}@", "utf-8") + message.encode("utf-8")
             
             node_socket.sendall(msg)
+    
+    #//TODO verificar que o socket tem conexão com o exterior
+    def start_server_side(self):
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen()
+
+            while True:
+                conn, addr = server_socket.accept()
+                logging.info(f"\nConnected by {addr}")
+                client_handler_thread = threading.Thread(target=self.client_handler, args=(conn, addr))
+                client_handler_thread.start()
+    
+    def client_side(self):
+        return
+        
             
             
 if __name__ == "__main__":
