@@ -56,16 +56,16 @@ class Node:
             print("Formato de mensagem inválido")
             return
 
-        tipo, ip_destino, nome_arquivo, blocos_str, tamanho = parts
+        type, ip, name, blocos_info, size = parts
 
         # Verifica se o tipo é "download"
-        if tipo.lower() != "download": #ou GET
+        if type.lower() != "download": #ou GET?
             print("Tipo de mensagem inválido para envio de arquivo")
             return
 
         # Converte blocos para uma lista de inteiros
         blocos = []
-        blocos_parts = blocos_str.split(",")
+        blocos_parts = blocos_info.split(",")
         for blocos_part in blocos_parts:
             if "-" in blocos_part:
                 start, end = map(int, blocos_part.split("-"))
@@ -75,23 +75,23 @@ class Node:
 
         # Converte tamanho para inteiro
         try:
-            tamanho = int(tamanho)
+            size = int(size)
         except ValueError:
             print("Valor inválido para tamanho")
             return
 
         # Verifica se o arquivo existe
-        if nome_arquivo not in self.files:
-            print(f"O arquivo {nome_arquivo} não foi encontrado no nó")
+        if name not in self.files:
+            print(f"O arquivo {name} não foi encontrado no nó")
             return
 
         # Verifica se todos os blocos solicitados estão disponíveis
-        blocos_disponiveis = self.files[nome_arquivo]['blocks_available']
+        blocos_disponiveis = self.files[name]['blocks_available']
         if not all(block in blocos_disponiveis for block in blocos):
             print("Alguns blocos solicitados não estão disponíveis")
             return
 
-        print(f"Enviando arquivo {nome_arquivo} para {ip_destino}")
+        #print(f"Enviando arquivo {name} para {ip}")
     
     def ask_file(self):
         #pedir conexão ao tracker, perguntar sobre o ip onde está o ficheiro que queremos e blocos disponiveis
