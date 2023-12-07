@@ -1,22 +1,16 @@
-FS_Tracker:
-
-tracker.py pode ser o ponto de entrada para o FS_Tracker.
-Criar uma classe para representar o tracker.
-Implementar um servidor UDP para que os FS_Nodes possam registrar seus pacotes e informações do arquivo.
-Utilizar um dicionário para manter um DB sobre as ficheiros, pacotes e ip´s
-Implementar uma API para que os FS_Nodes possam consultar as informações dos pacotes e arquivos.
-
-Calcular payload.
-Definir a comunicacao
-Começar com strings e mudar para bytes
-
 FS_Node:
 
 node.py pode ser o ponto de entrada para o FS_Node.
 Criar uma classe para representar um nó do FS_Node.
-Implementar um servidor TCP para que outros FS_Nodes possam se conectar e trocar informações.
+Implementar um servidor UDP para que outros FS_Nodes possam se conectar e trocar informações.
 Implementar algoritmos de seleção para decidir a quem enviar pacotes.
 Manter um registro de pacotes que o nó possui e os pacotes que deseja receber.
+
+Cliente/Servidor simultâneo:
+
+Para que o FS_Node aja como cliente e servidor simultaneamente, vamos precisar de threads separadas 
+para tratar a comunicação com outros FS_Nodes e atender a solicitações de outros FS_Nodes.
+
 Comunicação entre FS_Tracker e FS_Node:
 
 Implementar um protocolo para a comunicação entre o FS_Tracker e o FS_Node via UDP. Isso pode incluir mensagens
@@ -24,10 +18,6 @@ para registrar pacotes, consultar informações e atualizar informações.
 Implementar um protocolo para a comunicação entre FS_Nodes via TCP. Isso pode incluir mensagens para 
 trocar informações de pacotes e coordenar a transferência.
 
-Cliente/Servidor simultâneo:
-
-Para que o FS_Node aja como cliente e servidor simultaneamente, vamos precisar de threads separadas 
-para tratar a comunicação com outros FS_Nodes e atender a solicitações de outros FS_Nodes.
 
 
 Teste e Depuração:

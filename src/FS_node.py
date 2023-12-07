@@ -6,43 +6,16 @@ HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 HEADERSIZE = 15
 
-class FSTransferProtocol:
-    """
-    Class for implementing the FS Transfer Protocol for communication between nodes.
-    """
-
-    def __init__(self, host, port, tracker_host, tracker_port):
-        self.node = Node(host, port, tracker_host, tracker_port)
-
-    def start(self):
-        self.node.start()
-
-
 class Node:
-    def __init__(self, host, port, tracker_host, tracker_port):
+    def __init__(self, host, port, tracker_host, tracker_port, files):
         self.host = host
         self.port = port
         self.tracker_host = tracker_host
         self.tracker_port = tracker_port
-        self.files = {
-            'example_file1.txt': {
-                'ip': '192.168.0.2',
-                'blocks_available': [1, 2, 3, 4, 5],
-                'total_blocks': 5
-            },
-            'example_file2.txt': {
-                'ip': '192.168.0.1',
-                'blocks_available': [2, 4, 5, 6],
-                'total_blocks': 6
-            },
-            'example_file3.txt': {
-                'ip': '192.168.0.2',
-                'blocks_available': [7, 8, 9],
-                'total_blocks': 9
-            }
-        }
+        self.lock = threading.RLock()
+        self.files = files
 
-    def start(self):
+    def send_info_tracker(self):
         """
         Establishes a connection with the tracker and sends a 'hello' message containing file information.
         Prints the response received from the tracker.
@@ -63,22 +36,27 @@ class Node:
     
     #//TODO verificar que o socket tem conexão com o exterior
     def start_server_side(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
-            server_socket.bind((self.host, self.port))
-            server_socket.listen()
-
-            while True:
-                conn, addr = server_socket.accept()
-                logging.info(f"\nConnected by {addr}")
-                client_handler_thread = threading.Thread(target=self.client_handler, args=(conn, addr))
-                client_handler_thread.start()
+        #abrir um socket UDP e ficar a espera de uma conexão
+        #quando receber a conexão, é necessário receber a mensagem e enviar a mensagem para um handler, para saber o que fazer
     
-    def client_side(self):
+    def send_file(self, message):
+        #Retirar de message o nome do ficheiro, e os blocos que se querem para download
+        #procurar por esse file no node e enviar
+    
+    def ask_file(self):
+        #pedir conexão ao tracker, perguntar sobre o ip onde está o ficheiro que queremos e blocos disponiveis
+        #tracker devolve uma mensagem com a informação
+        #utilizar essa informação para pedir o ficheiro ao ip correspondente
         return
         
             
             
 if __name__ == "__main__":
-    # Initialize the FS Transfer Protocol with the Node's host, port, tracker's host, and port
-    fs_transfer_protocol = FSTransferProtocol('localhost', 9999, HOST, PORT)
-    fs_transfer_protocol.start()
+    file1 =
+    file2 =
+    file3 =
+    file4 =
+    #conectar ao tracker e enviar a informação
+    #inicializar o servidor
+    #sempre que houver uma alteração na quantidade de ficheiros ou blocos, enviar um base de dados atualizada
+    
