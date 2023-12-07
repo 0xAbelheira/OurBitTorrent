@@ -37,11 +37,61 @@ class Node:
     #//TODO verificar que o socket tem conexão com o exterior
     def start_server_side(self):
         #abrir um socket UDP e ficar a espera de uma conexão
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen()
         #quando receber a conexão, é necessário receber a mensagem e enviar a mensagem para um handler, para saber o que fazer
+            while True:
+                    msg, addr = server_socket.recvfrom(1024)  # Tamanho máximo dos dados recebidos (ajuste conforme necessário)
+
+                    client_handler_thread = threading.Thread(target = self.handle_message, args=(msg, addr))
+                    client_handler_thread.start()
     
     def send_file(self, message):
-        #Retirar de message o nome do ficheiro, e os blocos que se querem para download
+        #Retirar de message o tipo da menssagem, o nome do ficheiro, e os blocos que se querem para download
         #procurar por esse file no node e enviar
+
+        parts = message.split(";")
+        if len(parts) != 5:
+            print("Formato de mensagem inválido")
+            return
+
+        tipo, ip_destino, nome_arquivo, blocos_str, tamanho = parts
+
+        # Verifica se o tipo é "download"
+        if tipo.lower() != "download": #ou GET
+            print("Tipo de mensagem inválido para envio de arquivo")
+            return
+
+        # Converte blocos para uma lista de inteiros
+        blocos = []
+        blocos_parts = blocos_str.split(",")
+        for blocos_part in blocos_parts:
+            if "-" in blocos_part:
+                start, end = map(int, blocos_part.split("-"))
+                blocos.extend(range(start, end + 1))
+            else:
+                blocos.append(int(blocos_part))
+
+        # Converte tamanho para inteiro
+        try:
+            tamanho = int(tamanho)
+        except ValueError:
+            print("Valor inválido para tamanho")
+            return
+
+        # Verifica se o arquivo existe
+        if nome_arquivo not in self.files:
+            print(f"O arquivo {nome_arquivo} não foi encontrado no nó")
+            return
+
+        # Verifica se todos os blocos solicitados estão disponíveis
+        blocos_disponiveis = self.files[nome_arquivo]['blocks_available']
+        if not all(block in blocos_disponiveis for block in blocos):
+            print("Alguns blocos solicitados não estão disponíveis")
+            return
+
+        print(f"Enviando arquivo {nome_arquivo} para {ip_destino}")
     
     def ask_file(self):
         #pedir conexão ao tracker, perguntar sobre o ip onde está o ficheiro que queremos e blocos disponiveis

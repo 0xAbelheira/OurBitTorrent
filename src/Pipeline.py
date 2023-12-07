@@ -15,3 +15,4 @@ class Pipeline(queue.Queue):
         logging.debug("%s:about to add %d to queue", name, value)
         self.put(value)
         logging.debug("%s:added %d to queue", name, value)
+
