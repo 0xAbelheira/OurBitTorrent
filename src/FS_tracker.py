@@ -43,23 +43,57 @@ class Tracker:
 
             while True:
                 conn, addr = server_socket.accept()
-                logging.info(f"\nConnected by {addr}")
+                logging.info(f"Connected by {addr}")
                 client_handler_thread = threading.Thread(target=self.client_handler, args=(conn, addr))
                 client_handler_thread.start()
-
-    def print(self):
-        with self.lock:
-            logging.debug("test thread")
 
     def client_handler(self, conn, addr):
         with self.lock:
             data = self.handle_msg_size(conn)
-            if data:
+            if data.startswith(b"HELLO:"):
                 self.handle_hello_message(data, addr[0])
                 conn.sendall(
-                    bytes(f"Data received and processed for {addr}", "utf-8"))
-            # Additional logic for GET message if needed
+                    bytes(f"HELLO msg, received and processed for {addr}", "utf-8"))
+            elif data.startswith(b"GET:"):
+                file_info = self.handle_get_message(data, addr[0])
+                #TODO Verificar s é possivel ter dois sends seguidos
+                conn.sendall(
+                    bytes(f"GET msg, received and processed for {addr}", "utf-8"))
+                conn.sendall(
+                    bytes(file_info))
+            else:
+                logging.warning("Invalid message type " + data.decode("utf-8"))
 
+    def handle_hello_message(self, data, node_ip):
+        try:
+            data_str = data.decode("utf-8")
+            logging.info(f"Received HELLO message from {node_ip}")
+            files_info = data_str[len("HELLO:"):].split('\n')
+            logging.debug(f"Files Info: {files_info}")  
+            for file_info in files_info:
+                file_data = file_info.split(':')
+                if len(file_data) == 4:
+                    file_name, file_size, file_nBlocks, blocks_available = file_data
+                    logging.info(f"Node IP: {node_ip}, File: {file_name}, File_size: {file_size} Blocks: {blocks_available}, Total Blocks: {file_nBlocks}")
+                    self.database.add_file(file_name, node_ip, blocks_available, file_nBlocks)
+                else:
+                    logging.warning(f"Invalid file info: {file_info}")
+        except Exception as e:
+            logging.error(f"Error in handle_hello_message: {e}")
+
+    def handle_get_message(self, data, node_ip):
+        try:
+            data_str = data.decode("utf-8")
+            logging.info(f"Received GET message from {node_ip}")
+        
+            file_name = data_str[len("GET:"):]
+            file_info = self.database.get_file_info(file_name)
+            logging.debug(f"Files Info: {file_info}")  
+            
+            return file_info
+        except Exception as e:
+            logging.error(f"Error in handle_get_message: {e}")
+            
     def handle_msg_size(self, conn):
         size_data = b''
         delimiter = b'@'
@@ -90,29 +124,6 @@ class Tracker:
             full_msg += msg
 
         return full_msg if len(full_msg) == msg_size else None
-
-
-    def handle_hello_message(self, data, node_ip):
-        try:
-            data_str = data.decode('utf-8')
-            logging.info(f"Received HELLO message from {node_ip}")
-            if data_str.startswith("HELLO:"):
-                files_info = data_str[len("HELLO:"):].split('\n')
-                logging.debug(f"Files Info: {files_info}")  # Add this line for debugging
-                for file_info in files_info:
-                    file_data = file_info.split(':')
-                    if len(file_data) == 4:
-                        file_name, ip, blocks_str, total_blocks = file_data
-                        blocks_available = list(map(int, blocks_str.split(',')))
-                        logging.info(f"Node IP: {node_ip}, File: {file_name}, IP: {ip}, Blocks: {blocks_available}, Total Blocks: {total_blocks}")
-                        self.database.add_file(file_name, ip, blocks_available, total_blocks)
-                    else:
-                        logging.warning(f"Invalid file info: {file_info}")
-            else:
-                logging.warning("Invalid message type")
-        except Exception as e:
-            logging.error(f"Error in handle_hello_message: {e}")
-
 
 if __name__ == "__main__":
     # Initialize the FS Track Protocol with the Tracker's host and port

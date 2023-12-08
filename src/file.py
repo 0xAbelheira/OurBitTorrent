@@ -1,13 +1,19 @@
 class File:
-    def __init__(self, name, size, num_blocks, block_size):
+    def __init__(self, name, size):
         self.name = name
         self.size = size
-        self.num_blocks = num_blocks
         self.block_size = 1000
-        self.blocks_available = list(range(1, num_blocks + 1)) #//TODO Deste modo todos os blocos estão diponiveis, o que não é o melhor
+        self.num_blocks = self.calculate_blocks(self.size, self.block_size)
+        self.blocks_available = list(range(1, self.num_blocks + 1))
     
     def __str__(self):
         return f"File(name={self.name}, size={self.size} bytes, num_blocks={self.num_blocks}, block_size={self.block_size}"
+    
+    def calculate_blocks(self, size, block_size):
+        if (size%block_size == 0):
+            return int(size/block_size)
+        else:
+            return int(size/block_size + 1)
      
     def get_file_info(self):
         return{

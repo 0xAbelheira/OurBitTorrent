@@ -1,6 +1,8 @@
 import socket
 import logging
+import time
 import threading
+from file import File
 
 HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
@@ -21,11 +23,11 @@ class Node:
         Prints the response received from the tracker.
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as node_socket:
-            node_socket.connect((self.tracker_host, self.tracker_port))  # Fix here
+            node_socket.connect(self.tracker_host, self.tracker_port)
             
             files_str = "\n".join(
-                f"{key}:{value['ip']}:{','.join(map(str, value['blocks_available']))}:{value['total_blocks']}"
-                for key, value in self.files.items()
+                f"{file.name}:{file.size}:{file.num_blocks}:{','.join(map(str, file.blocks_available))}"
+                for file in self.files
             )
             
             message = f"HELLO:{files_str}"
@@ -33,7 +35,10 @@ class Node:
             msg = bytes(f"{len(message)}@", "utf-8") + message.encode("utf-8")
             
             node_socket.sendall(msg)
-    
+            
+            response = node_socket.recv(1024).decode('utf-8')
+            print(response);
+        
     #//TODO verificar que o socket tem conexão com o exterior
     def start_server_side(self):
         #abrir um socket UDP e ficar a espera de uma conexão
@@ -47,6 +52,13 @@ class Node:
                     client_handler_thread = threading.Thread(target = self.handle_message, args=(msg, addr))
                     client_handler_thread.start()
     
+        pass
+    
+    def handle_message(self, message, addr):
+        # Implement logic to handle different types of messages
+        # Example: Check message type and call corresponding methods
+        pass
+
     def send_file(self, message):
         #Retirar de message o tipo da menssagem, o nome do ficheiro, e os blocos que se querem para download
         #procurar por esse file no node e enviar
@@ -93,19 +105,43 @@ class Node:
 
         #print(f"Enviando arquivo {name} para {ip}")
     
-    def ask_file(self):
-        #pedir conexão ao tracker, perguntar sobre o ip onde está o ficheiro que queremos e blocos disponiveis
-        #tracker devolve uma mensagem com a informação
-        #utilizar essa informação para pedir o ficheiro ao ip correspondente
-        return
-        
+    def ask_file(self, filename):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tracker_socket:
+            tracker_socket.connect(self.tracker_host, self.tracker_port)
             
+            message = f"GET:{filename}"
+            msg = bytes(f"{len(message)}@", "utf-8") + message.encode("utf-8")
+            tracker_socket.sendall(msg)
+            
+            response = tracker_socket.recv(1024).decode('utf-8')
+            print(response);
+            
+            file_info = tracker_socket.recv(1024).decode('utf-8')
+            
+            info = self.choose_ip(file_info)
+            tracker_socket.close()
+        
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as node_socket:
+            node_socket.connect(self.host, info)
+        #TODO Criar conexão com outro peer e pedir o ficheiro
+        #TODO Criar mensagem DOWNLOAD
+    
+    #TODO Retirar do info os ip que queremos aceder e quais os blocos a retirar de cada ip
+    def choose_ip(self, info):
+        pass
             
 if __name__ == "__main__":
-    file1 =
-    file2 =
-    file3 =
-    file4 =
+    # Creating five instances of the File class
+    file1 = File("file1.txt", 1024)
+    file2 = File("file2.jpg", 2048)
+    file3 = File("file3.docx", 3072)
+    file4 = File("file4.pdf", 4096)
+    file5 = File("file5.txt", 512)
+    # Displaying information about each
+    files = [file1,file2,file3,file4,file5]
+    node = Node('localhost', 50000, HOST, PORT, files)
+    node.send_info_tracker()
+    node.ask_file("file2.jpg")
     #conectar ao tracker e enviar a informação
     #inicializar o servidor
     #sempre que houver uma alteração na quantidade de ficheiros ou blocos, enviar um base de dados atualizada
