@@ -1,3 +1,5 @@
+import logging
+
 class File:
     def __init__(self, name, size):
         self.name = name
@@ -24,17 +26,13 @@ class File:
             'blocks_available': self.blocks_available
         }
         
-    def mark_block_unavailable(self, block_number):
-        if block_number in self.blocks_available:
-            self.blocks_available.remove(block_number)
-            return True
-        else:
-            return False
+    def mark_blocks_unavailable(self, block_numbers):
+        for block_number in block_numbers:
+            if self.mark_block_unavailable(block_number):
+                logging.debug(f"Marked block {block_number} as unavailable for file {self.name}")
 
-    def mark_block_available(self, block_number):
-        if block_number not in self.blocks_available:
-            self.blocks_available.append(block_number)
-            return True
-        else:
-            return False
+    def mark_blocks_available(self, block_numbers):
+        for block_number in block_numbers:
+            if self.mark_block_available(block_number):
+                logging.debug(f"Marked block {block_number} as available for file {self.name}")
     

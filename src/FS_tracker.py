@@ -4,7 +4,7 @@ import logging
 from Database import Database
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='tracker.log', filemode='w', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -37,6 +37,7 @@ class Tracker:
         self.lock = threading.RLock()
 
     def start_server(self):
+        logging.info(f"Starting Server...")
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
             server_socket.listen()
@@ -56,11 +57,14 @@ class Tracker:
                     bytes(f"HELLO msg, received and processed for {addr}", "utf-8"))
             elif data.startswith(b"GET:"):
                 file_info = self.handle_get_message(data, addr[0])
-                #TODO Verificar s é possivel ter dois sends seguidos
-                conn.sendall(
-                    bytes(f"GET msg, received and processed for {addr}", "utf-8"))
-                conn.sendall(
-                    bytes(file_info))
+                if file_info:
+                    response = "GET msg, received and processed for {addr}"
+                    conn.sendall(bytes(f"{len(response)}@", "utf-8") + response.encode("utf-8"))
+
+                    conn.sendall(bytes(f"{len(file_info)}@", "utf-8") + file_info.encode("utf-8"))
+                else:
+                    logging.warning(f"File not found")
+                    conn.sendall(bytes(f"File not found", "utf-8"))
             else:
                 logging.warning("Invalid message type " + data.decode("utf-8"))
 
@@ -74,7 +78,7 @@ class Tracker:
                 file_data = file_info.split(':')
                 if len(file_data) == 4:
                     file_name, file_size, file_nBlocks, blocks_available = file_data
-                    logging.info(f"Node IP: {node_ip}, File: {file_name}, File_size: {file_size} Blocks: {blocks_available}, Total Blocks: {file_nBlocks}")
+                    logging.debug(f"Node IP: {node_ip}, File: {file_name}, File_size: {file_size} Blocks: {blocks_available}, Total Blocks: {file_nBlocks}")
                     self.database.add_file(file_name, node_ip, blocks_available, file_nBlocks)
                 else:
                     logging.warning(f"Invalid file info: {file_info}")
@@ -87,7 +91,7 @@ class Tracker:
             logging.info(f"Received GET message from {node_ip}")
         
             file_name = data_str[len("GET:"):]
-            file_info = self.database.get_file_info(file_name)
+            file_info = self.database.get_all_files_info_string([file_name])
             logging.debug(f"Files Info: {file_info}")  
             
             return file_info
@@ -109,19 +113,24 @@ class Tracker:
             msg_size = int(size_data.decode('utf-8'))
         except ValueError:
             # Handle the case where the size data is not a valid integer
+            logging.error("Invalid message size data")
             return None
 
         full_msg = b''
-        
+
         while len(full_msg) < msg_size:
             remaining_size = msg_size - len(full_msg)
             chunk_size = min(1024, remaining_size)
             msg = conn.recv(chunk_size)
 
             if not msg:
-                break  # Connection closed
+                logging.error("Connection closed before receiving the full message")
+                break
 
             full_msg += msg
+
+        if len(full_msg) != msg_size:
+            logging.error("Incomplete message received")
 
         return full_msg if len(full_msg) == msg_size else None
 
