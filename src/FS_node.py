@@ -134,6 +134,7 @@ class Node:
                 #BUG POR ALGUMA FUCKING RAZÃO, PRECISO DE DOIS DEBUG AQUI, SENÃO O PROGRAMA DÁ CRASH
                 # SUSPEITO QUE TENHA A VER COM O TEMPO DE RECEBER MENSAGEM
                 logging.debug(f"File info - {file_info}")
+                logging.debug(f"File info - {file_info}")
                 
                 download_info = self.choose_block_and_location(file_info)
                 if download_info:
