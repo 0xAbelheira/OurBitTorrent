@@ -42,7 +42,7 @@ class Node:
             
             node_socket.sendall(msg)
             
-            response = node_socket.recv(1024).decode('utf-8')
+            response = node_socket.recv(1500).decode('utf-8')
             logging.info(f"{response}");
             
     def start_server_side(self):
@@ -55,66 +55,45 @@ class Node:
             server_socket.bind((self.host, self.port))
 
             while True:
-                data, addr = server_socket.recvfrom(1024)
+                data, addr = server_socket.recvfrom(1500)
                 if data:
                     logging.info(f"Received data from {addr}")
-                    client_handler_thread = threading.Thread(target=self.client_handler, args=(data, addr))
+                    client_handler_thread = threading.Thread(target=self.client_handler, args=(data, addr, server_socket))
                     client_handler_thread.start()
 
-    def client_handler(self, message, addr):
+    def client_handler(self, message, addr, server_socket):
         with self.lock:
-            logging.debug(f"Message from udp connection - {message}")
+            logging.debug(f"Message from UDP connection - {message}")
             if message.startswith(b"DOWNLOAD:"):
                 logging.info(f"DOWNLOAD msg, received from {addr}")
-        # Implement logic to handle different types of messages
-        # Example: Check message type and call corresponding methods
-        pass
+                data = self.select_data(message)
+                server_socket.sendto(data, addr)
+                logging.info(f"Enviado o bloco para o outro peer!")
 
-    def send_file(self, message):
-        #Retirar de message o tipo da menssagem, o nome do ficheiro, e os blocos que se querem para download
-        #procurar por esse file no node e enviar
 
-        parts = message.split(";")
-        if len(parts) != 5:
+    def select_data(self, message):
+        message = bytes(message)
+        parts = message.decode("utf-8").split(":")  # Decode bytes to string
+        if len(parts) != 3:
             print("Formato de mensagem inválido")
             return
 
-        type, ip, name, blocos_info, size = parts
+        msgtype, name, block_str = parts
 
-        # Verifica se o tipo é "download"
-        if type.lower() != "download": #ou GET?
+        if msgtype.lower() != "download":  # ou GET?
             print("Tipo de mensagem inválido para envio de arquivo")
             return
 
-        # Converte blocos para uma lista de inteiros
-        blocos = []
-        blocos_parts = blocos_info.split(",")
-        for blocos_part in blocos_parts:
-            if "-" in blocos_part:
-                start, end = map(int, blocos_part.split("-"))
-                blocos.extend(range(start, end + 1))
-            else:
-                blocos.append(int(blocos_part))
+        file = File(name)
 
-        # Converte tamanho para inteiro
-        try:
-            size = int(size)
-        except ValueError:
-            print("Valor inválido para tamanho")
-            return
+        for block in file.block_data:
+            if block['block_number'] == int(block_str):
+                data = block['data']
 
-        # Verifica se o arquivo existe
-        if name not in self.files:
-            print(f"O arquivo {name} não foi encontrado no nó")
-            return
-
-        # Verifica se todos os blocos solicitados estão disponíveis
-        blocos_disponiveis = self.files[name]['blocks_available']
-        if not all(block in blocos_disponiveis for block in blocos):
-            print("Alguns blocos solicitados não estão disponíveis")
-            return
-
-        #print(f"Enviando arquivo {name} para {ip}")
+        logging.info(f"Selecionado bloco -{block_str}- com informacao: {data}")
+        msg = bytes(f"{file.size}@", "utf-8") + data
+        return msg
+        
     
     def ask_file(self, filename):
         try:
@@ -190,6 +169,8 @@ class Node:
 
     def download_blocks(self, download_list, filename):
         try:
+            new_file = File()
+            self.files.append(new_file)
             for peer_info in download_list:
                 ip = peer_info['ip']
                 blocks_to_download = peer_info['blocks']
@@ -207,21 +188,22 @@ class Node:
                         node_socket.sendall(msg)
 
                         # Assuming the file_data is received through UDP
-                        file_data, _ = node_socket.recvfrom(1024)
-
-                        # Process the received file data (protocol-specific)
-                        self.process_file_data(file_data)
-
-                        # Update the set of downloaded blocks
-                        self.downloaded_blocks.add(block_to_download)
+                        file_data, _ = node_socket.recvfrom(1500)
+                        
+                        logging.info(f"Recebido bloco com informação {file_data}")
+                        
+                        parts = file_data.decode("utf-8").split('@')
+                        size, data = parts
+                        size = int(size)
+                        new_file.set_values(filename, size)
+                        new_file.add_blockdata(data, block_to_download)
+                        self.send_info_tracker()
+            logging.info(f"Recebido ficheiro {filename} com informação")
+            new_file.build_file()
 
         except Exception as e:
             logging.error(f"Error in download_blocks: {e}")
 
-            
-    def process_file_data(self, file_data):
-        # Implement the logic to process received file data (protocol-specific)
-        pass
     
     def handle_msg_size(self, conn):
         size_data = b''
@@ -260,13 +242,11 @@ class Node:
     
                 
 if __name__ == "__main__":
-    file1 = File("file1.txt", 1024)
-    file2 = File("file2.jpg", 2048)
-    file3 = File("file3.docx", 3072)
-    file4 = File("file4.pdf", 4096)
-    file5 = File("file5.txt", 512)
-
-    files = [file1, file2, file3, file4, file5]
+    file1 = File("/home/paulo/Desktop/OurBitTorrent/File1.txt")
+    file2 = File("/home/paulo/Desktop/OurBitTorrent/File2.txt")
+    file3 = File("/home/paulo/Desktop/OurBitTorrent/File3.txt")
+    file4 = File("/home/paulo/Desktop/OurBitTorrent/File4.txt")
+    files = [file1, file2, file3, file4]
     node = Node('localhost', 50000, HOST, PORT, files)
     node.send_info_tracker()
 
@@ -274,5 +254,5 @@ if __name__ == "__main__":
     node.start_server_side()
 
     # Continue with other operations (e.g., asking for files)
-    node.ask_file("file2.jpg")
+    node.ask_file("/home/paulo/Desktop/OurBitTorrent/File2.txt")
     
