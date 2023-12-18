@@ -1,56 +1,62 @@
-2023-12-18 20:40:12,487 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/OurBitTorrent/File1.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2,3
-/home/paulo/Desktop/OurBitTorrent/File3.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File4.txt:6:1:1
-2023-12-18 20:40:12,488 - INFO - HELLO msg, received and processed for ('127.0.0.1', 35348)
-2023-12-18 20:40:12,489 - INFO - Starting Server...
-2023-12-18 20:40:12,489 - DEBUG - Message to send - GET:/home/paulo/Desktop/OurBitTorrent/File2.txt
-2023-12-18 20:40:12,490 - INFO - GET msg, received and processed for {addr}
-2023-12-18 20:40:12,490 - DEBUG - File info - 127.0.0.1:1,2,3:3
-2023-12-18 20:40:12,490 - DEBUG - File info - 127.0.0.1:1,2,3:3
-2023-12-18 20:40:12,490 - DEBUG - Download list - [{'ip': '127.0.0.1', 'blocks': [1, 2, 3]}]
-2023-12-18 20:40:12,490 - DEBUG - Remaining_blocks list - []
-2023-12-18 20:40:12,490 - DEBUG - Connected to - 127.0.0.1
-2023-12-18 20:40:12,490 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:1
-2023-12-18 20:40:12,490 - INFO - Received data from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,491 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:1'
-2023-12-18 20:40:12,491 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,491 - INFO - Selecionado bloco -1- com informacao: b'ALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAA'
-2023-12-18 20:40:12,491 - INFO - Enviado o bloco para o outro peer!
-2023-12-18 20:40:12,491 - INFO - Recebido bloco com informação b'2375@ALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAA'
-2023-12-18 20:40:12,491 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/OurBitTorrent/File1.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2,3
-/home/paulo/Desktop/OurBitTorrent/File3.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File4.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1
-2023-12-18 20:40:12,493 - INFO - HELLO msg, received and processed for ('127.0.0.1', 35360)
-2023-12-18 20:40:12,493 - DEBUG - Connected to - 127.0.0.1
-2023-12-18 20:40:12,493 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:2
-2023-12-18 20:40:12,493 - INFO - Received data from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,493 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:2'
-2023-12-18 20:40:12,493 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,494 - INFO - Selecionado bloco -2- com informacao: b'AAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaa'
-2023-12-18 20:40:12,494 - INFO - Enviado o bloco para o outro peer!
-2023-12-18 20:40:12,494 - INFO - Recebido bloco com informação b'2375@AAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaa'
-2023-12-18 20:40:12,494 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/OurBitTorrent/File1.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2,3
-/home/paulo/Desktop/OurBitTorrent/File3.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File4.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2
-2023-12-18 20:40:12,495 - INFO - HELLO msg, received and processed for ('127.0.0.1', 35374)
-2023-12-18 20:40:12,495 - DEBUG - Connected to - 127.0.0.1
-2023-12-18 20:40:12,495 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:3
-2023-12-18 20:40:12,495 - INFO - Received data from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,496 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/OurBitTorrent/File2.txt:3'
-2023-12-18 20:40:12,496 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 34040)
-2023-12-18 20:40:12,496 - INFO - Selecionado bloco -3- com informacao: b'aaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen'
-2023-12-18 20:40:12,496 - INFO - Enviado o bloco para o outro peer!
-2023-12-18 20:40:12,496 - INFO - Recebido bloco com informação b'2375@aaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen'
-2023-12-18 20:40:12,496 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/OurBitTorrent/File1.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2,3
-/home/paulo/Desktop/OurBitTorrent/File3.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File4.txt:6:1:1
-/home/paulo/Desktop/OurBitTorrent/File2.txt:2375:3:1,2,3
-2023-12-18 20:40:12,498 - INFO - HELLO msg, received and processed for ('127.0.0.1', 35376)
-2023-12-18 20:40:12,498 - INFO - Recebido ficheiro /home/paulo/Desktop/OurBitTorrent/File2.txt com informação
-2023-12-18 20:40:12,498 - DEBUG - Remaining blocks: []
+2023-12-18 22:38:16,672 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2,3
+/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt:6:1:1
+2023-12-18 22:38:16,674 - INFO - HELLO msg, received and processed for ('127.0.0.1', 45036)
+2023-12-18 22:38:16,675 - INFO - Starting Server...
+2023-12-18 22:38:16,675 - DEBUG - Message to send - GET:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt
+2023-12-18 22:38:16,676 - INFO - GET msg, received and processed for {addr}
+2023-12-18 22:38:16,676 - DEBUG - File info - 127.0.0.1:1,2,3:3
+2023-12-18 22:38:16,676 - DEBUG - File info - 127.0.0.1:1,2,3:3
+2023-12-18 22:38:16,676 - DEBUG - Download list - [{'ip': '127.0.0.1', 'blocks': [1, 2, 3]}]
+2023-12-18 22:38:16,677 - DEBUG - Remaining_blocks list - []
+2023-12-18 22:38:16,677 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,677 - DEBUG - Message from UDP connection - b'ACK'
+2023-12-18 22:38:16,677 - DEBUG - Connected to - 127.0.0.1
+2023-12-18 22:38:16,677 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:1
+2023-12-18 22:38:16,678 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,678 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:1'
+2023-12-18 22:38:16,678 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,678 - INFO - Selecionado bloco -1- com informacao: b'ALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAA'
+2023-12-18 22:38:16,679 - INFO - Enviado o bloco para o outro peer!
+2023-12-18 22:38:16,679 - INFO - Recebido bloco com informação b'2375@ALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAA'
+2023-12-18 22:38:16,679 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2,3
+/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1
+2023-12-18 22:38:16,681 - INFO - HELLO msg, received and processed for ('127.0.0.1', 45056)
+2023-12-18 22:38:16,682 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,683 - DEBUG - Connected to - 127.0.0.1
+2023-12-18 22:38:16,683 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2
+2023-12-18 22:38:16,683 - DEBUG - Message from UDP connection - b'ACK'
+2023-12-18 22:38:16,684 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,684 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2'
+2023-12-18 22:38:16,684 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,685 - INFO - Selecionado bloco -2- com informacao: b'AAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaa'
+2023-12-18 22:38:16,685 - INFO - Enviado o bloco para o outro peer!
+2023-12-18 22:38:16,685 - INFO - Recebido bloco com informação b'2375@AAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaa'
+2023-12-18 22:38:16,685 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2,3
+/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2
+2023-12-18 22:38:16,687 - INFO - HELLO msg, received and processed for ('127.0.0.1', 45062)
+2023-12-18 22:38:16,687 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,688 - DEBUG - Connected to - 127.0.0.1
+2023-12-18 22:38:16,688 - DEBUG - Download message to send - DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:3
+2023-12-18 22:38:16,688 - DEBUG - Message from UDP connection - b'ACK'
+2023-12-18 22:38:16,688 - INFO - Received data from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,689 - DEBUG - Message from UDP connection - b'DOWNLOAD:/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:3'
+2023-12-18 22:38:16,689 - INFO - DOWNLOAD msg, received from ('127.0.0.1', 53333)
+2023-12-18 22:38:16,689 - INFO - Selecionado bloco -3- com informacao: b'aaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen'
+2023-12-18 22:38:16,689 - INFO - Enviado o bloco para o outro peer!
+2023-12-18 22:38:16,689 - INFO - Recebido bloco com informação b'2375@aaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen\nALLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaneifniosenfpoiwen'
+2023-12-18 22:38:16,689 - DEBUG - Message to send - HELLO:/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2,3
+/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt:6:1:1
+/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt:2375:3:1,2,3
+2023-12-18 22:38:16,691 - INFO - HELLO msg, received and processed for ('127.0.0.1', 45066)
+2023-12-18 22:38:16,691 - INFO - Recebido ficheiro /home/paulo/Desktop/Repos/OurBitTorrent/File2.txt com informação
+2023-12-18 22:38:16,691 - DEBUG - Remaining blocks: []

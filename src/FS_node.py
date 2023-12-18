@@ -1,7 +1,6 @@
 import socket
-import logging
-import json
 import time
+import logging
 import threading
 from file import File
 
@@ -54,14 +53,26 @@ class Node:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
             server_socket.bind((self.host, self.port))
 
+            # Dictionary to keep track of whether ACK has been sent for a specific client
+            ack_sent_dict = {}
+
             while True:
                 data, addr = server_socket.recvfrom(1500)
                 if data:
                     logging.info(f"Received data from {addr}")
-                    client_handler_thread = threading.Thread(target=self.client_handler, args=(data, addr, server_socket))
+
+                    # Send ACK only if it hasn't been sent for this client address
+                    if addr not in ack_sent_dict or not ack_sent_dict[addr]:
+                        ack_message = b"ACK"
+                        server_socket.sendto(ack_message, addr)
+                        ack_sent_dict[addr] = True
+
+                    # Create a new thread to handle the client's request
+                    client_handler_thread = threading.Thread(target=self.client_handler, args=(data, addr, server_socket, ack_sent_dict))
                     client_handler_thread.start()
 
-    def client_handler(self, message, addr, server_socket):
+
+    def client_handler(self, message, addr, server_socket, ack_sent_dict):
         with self.lock:
             logging.debug(f"Message from UDP connection - {message}")
             if message.startswith(b"DOWNLOAD:"):
@@ -70,17 +81,21 @@ class Node:
                 server_socket.sendto(data, addr)
                 logging.info(f"Enviado o bloco para o outro peer!")
 
+                # Set ACK sent to False for the next message from this client
+                ack_sent_dict[addr] = False
+
+
 
     def select_data(self, message):
         message = bytes(message)
-        parts = message.decode("utf-8").split(":")  # Decode bytes to string
+        parts = message.decode("utf-8").split(":") 
         if len(parts) != 3:
             print("Formato de mensagem inválido")
             return
 
         msgtype, name, block_str = parts
 
-        if msgtype.lower() != "download":  # ou GET?
+        if msgtype.lower() != "download":
             print("Tipo de mensagem inválido para envio de arquivo")
             return
 
@@ -110,8 +125,7 @@ class Node:
                 logging.info(f"{response}")
 
                 file_info = self.handle_msg_size(tracker_socket).decode('utf-8')
-                #BUG POR ALGUMA FUCKING RAZÃO, PRECISO DE DOIS DEBUG AQUI, SENÃO O PROGRAMA DÁ CRASH
-                # SUSPEITO QUE TENHA A VER COM O TEMPO DE RECEBER MENSAGEM
+                
                 logging.debug(f"File info - {file_info}")
                 logging.debug(f"File info - {file_info}")
                 
@@ -121,7 +135,6 @@ class Node:
 
                     self.download_blocks(download_list, filename)
 
-                    # Optionally, handle remaining blocks
                     logging.debug(f"Remaining blocks: {remaining_blocks}")
 
         except Exception as e:
@@ -140,10 +153,8 @@ class Node:
                 if len(parts) == 3:
                     ip, blocks_available, total_blocks = parts
                     
-                    # Convert blocks_available to a set of integers
                     blocks_available = set(map(int, blocks_available.split(',')))
 
-                    # Calculate available blocks excluding already downloaded blocks
                     available_blocks = blocks_available - self.downloaded_blocks
 
                     if available_blocks:
@@ -152,10 +163,8 @@ class Node:
             if not peers_info:
                 return None
 
-            # Calculate all available blocks across peers
             all_available_blocks = set.union(*[peer['blocks_available'] for peer in peers_info])
 
-            # Construct the download list and remaining blocks
             download_list = [{'ip': peer['ip'], 'blocks': sorted(list(peer['blocks_available']))} for peer in peers_info]
             remaining_blocks = sorted(list(all_available_blocks - set.union(*[peer['blocks_available'] for peer in peers_info])))
 
@@ -179,30 +188,66 @@ class Node:
                     node_socket.connect((ip, self.port))
 
                     for block_to_download in blocks_to_download:
+                        ack_message = b"ACK"
+                        node_socket.sendall(ack_message)
+
+                        ack_received = self.wait_for_acknowledgment(node_socket)
+                        
+                        if not ack_received:
+                            logging.error(f"No acknowledgment received from {ip} for block {block_to_download}. Aborting.")
+                            self.files.pop()
+                            return  
+
                         message = f"DOWNLOAD:{filename}:{block_to_download}"
                         logging.debug(f"Connected to - {ip}") 
                         logging.debug(f"Download message to send - {message}")
                         
                         msg = bytes(message, "utf-8")
-
                         node_socket.sendall(msg)
 
-                        # Assuming the file_data is received through UDP
-                        file_data, _ = node_socket.recvfrom(1500)
-                        
+                        try:
+                            file_data, _ = node_socket.recvfrom(1500)
+                        except socket.timeout:
+                            logging.error(f"Timeout waiting for data from {ip} for block {block_to_download}. Aborting.")
+                            self.files.pop()
+                            return  # Handle the error as needed
+
                         logging.info(f"Recebido bloco com informação {file_data}")
                         
                         parts = file_data.decode("utf-8").split('@')
+                        if len(parts) != 2:
+                            logging.error(f"Invalid data format{parts} received from {ip} for block {block_to_download}. Aborting.")
+                            self.files.pop()
+                            return  # Handle the error as needed
+
                         size, data = parts
                         size = int(size)
                         new_file.set_values(filename, size)
                         new_file.add_blockdata(data, block_to_download)
+                        
                         self.send_info_tracker()
+                            
             logging.info(f"Recebido ficheiro {filename} com informação")
             new_file.build_file()
 
         except Exception as e:
             logging.error(f"Error in download_blocks: {e}")
+
+
+    def wait_for_acknowledgment(self, node_socket, timeout=3):
+        start_time = time.time()
+        ack_received = False
+
+        while time.time() - start_time < timeout:
+            try:
+                ack, _ = node_socket.recvfrom(1500)
+                if ack == b"ACK":
+                    ack_received = True
+                    break
+            except socket.timeout:
+                pass
+
+        return ack_received
 
     
     def handle_msg_size(self, conn):
@@ -242,10 +287,10 @@ class Node:
     
                 
 if __name__ == "__main__":
-    file1 = File("/home/paulo/Desktop/OurBitTorrent/File1.txt")
-    file2 = File("/home/paulo/Desktop/OurBitTorrent/File2.txt")
-    file3 = File("/home/paulo/Desktop/OurBitTorrent/File3.txt")
-    file4 = File("/home/paulo/Desktop/OurBitTorrent/File4.txt")
+    file1 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt")
+    file2 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt")
+    file3 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt")
+    file4 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt")
     files = [file1, file2, file3, file4]
     node = Node('localhost', 50000, HOST, PORT, files)
     node.send_info_tracker()
@@ -254,5 +299,5 @@ if __name__ == "__main__":
     node.start_server_side()
 
     # Continue with other operations (e.g., asking for files)
-    node.ask_file("/home/paulo/Desktop/OurBitTorrent/File2.txt")
+    node.ask_file("/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt")
     
