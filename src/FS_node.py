@@ -85,7 +85,6 @@ class Node:
                 ack_sent_dict[addr] = False
 
 
-
     def select_data(self, message):
         message = bytes(message)
         parts = message.decode("utf-8").split(":") 
@@ -287,10 +286,10 @@ class Node:
     
                 
 if __name__ == "__main__":
-    file1 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File1.txt")
-    file2 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt")
-    file3 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File3.txt")
-    file4 = File("/home/paulo/Desktop/Repos/OurBitTorrent/File4.txt")
+    file1 = File("/Users/hugoabelheira/Documents/GitHub/OurBitTorrent/File1.txt")
+    file2 = File("/Users/hugoabelheira/Documents/GitHub/OurBitTorrent/File2.txt")
+    file3 = File("/Users/hugoabelheira/Documents/GitHub/OurBitTorrent/File3.txt")
+    file4 = File("/Users/hugoabelheira/Documents/GitHub/OurBitTorrent/File4.txt")
     files = [file1, file2, file3, file4]
     node = Node('localhost', 50000, HOST, PORT, files)
     node.send_info_tracker()
@@ -299,5 +298,5 @@ if __name__ == "__main__":
     node.start_server_side()
 
     # Continue with other operations (e.g., asking for files)
-    node.ask_file("/home/paulo/Desktop/Repos/OurBitTorrent/File2.txt")
+    node.ask_file("/Users/hugoabelheira/Documents/GitHub/OurBitTorrent/File2.txt")
     

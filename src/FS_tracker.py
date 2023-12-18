@@ -17,26 +17,50 @@ class FSTrackProtocol:
     """
 
     def __init__(self, host, port):
+        """
+        Initializes an instance of the FSTrackProtocol.
+
+        :param host: The hostname or IP address of the tracker.
+        :param port: The port on which the tracker will listen for incoming connections.
+        """
         self.tracker = Tracker(host, port)
 
     def start_server(self):
+        """
+        Starts the server to listen for incoming connections.
+        """
         self.tracker.start_server()
 
     def view_database(self):
+        """
+        Displays the current state of the database.
+        """
         self.tracker.view_database()
 
     def close_server(self):
+        """
+        Closes the server.
+        """
         self.tracker.close()
 
 
 class Tracker:
     def __init__(self, host, port):
+        """
+        Initializes an instance of the Tracker.
+
+        :param host: The hostname or IP address of the tracker.
+        :param port: The port on which the tracker will listen for incoming connections.
+        """
         self.host = host
         self.port = port
         self.database = Database()
         self.lock = threading.RLock()
 
     def start_server(self):
+        """
+        Starts the server to listen for incoming connections.
+        """
         logging.info(f"Starting Server...")
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
@@ -49,6 +73,12 @@ class Tracker:
                 client_handler_thread.start()
 
     def client_handler(self, conn, addr):
+        """
+        Handles the client's request.
+
+        :param conn: The connection socket.
+        :param addr: The address of the client.
+        """
         with self.lock:
             data = self.handle_msg_size(conn)
             if data.startswith(b"HELLO:"):
@@ -69,6 +99,12 @@ class Tracker:
                 logging.warning("Invalid message type " + data.decode("utf-8"))
 
     def handle_hello_message(self, data, node_ip):
+        """
+        Handles the HELLO message received from a node.
+
+        :param data: The HELLO message data.
+        :param node_ip: The IP address of the node.
+        """
         try:
             data_str = data.decode("utf-8")
             logging.info(f"Received HELLO message from {node_ip}")
@@ -86,6 +122,13 @@ class Tracker:
             logging.error(f"Error in handle_hello_message: {e}")
 
     def handle_get_message(self, data, node_ip):
+        """
+        Handles the GET message received from a node.
+
+        :param data: The GET message data.
+        :param node_ip: The IP address of the node.
+        :return: The file information string.
+        """
         try:
             data_str = data.decode("utf-8")
             logging.info(f"Received GET message from {node_ip}")
@@ -99,6 +142,12 @@ class Tracker:
             logging.error(f"Error in handle_get_message: {e}")
             
     def handle_msg_size(self, conn):
+        """
+        Handles the reception of a message with a specified size.
+
+        :param conn: The connection socket.
+        :return: The received message.
+        """
         size_data = b''
         delimiter = b'@'
 
